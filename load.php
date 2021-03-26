@@ -1,6 +1,35 @@
 <?php
+
+# X^31 + X^3 + 1
+# BINx31 - 2 147 483 647‬
+function produceSequence(&$numbers, &$register, &$str, &$text, &$bits)
+{
+    $mask_obr = 2147483647;
+    $str = '';
+    $bits = array();
+    $text = array();
+    foreach ($numbers as $b) {
+        $bit_key = '';
+        for ($i = 0; $i < 8; $i++) {
+            $bin = decbin($register);
+            $bin = str_pad($bin, 31, 0, STR_PAD_LEFT);
+            $new_bit = intval($bin[0]) ^ intval($bin[28]) ^ intval($bin[30]);
+            $bit_key .= $bin[0];
+            $register = ($register << 1) | $new_bit;
+            $register = $register & $mask_obr;
+        }
+        $bits[] = $bit_key;
+        $clet = $b ^ bindec($bit_key);
+        $str .= pack('C*', $clet);
+        $text[] = $clet;
+    }
+}
+
+
 # 11010111111010111101011101 = 56602461
 # 11111111111111111111111111 = 67108863
+#X^26 + X^8 + X^7 + X + 1
+/*
 function produceSequence(&$numbers, &$register, &$str, &$text, &$bits)
 {
     $mask_obr = 67108863;
@@ -23,6 +52,7 @@ function produceSequence(&$numbers, &$register, &$str, &$text, &$bits)
         $text[] = $clet;
     }
 }
+*/
 
 function Cipher($filename, $key)
 {

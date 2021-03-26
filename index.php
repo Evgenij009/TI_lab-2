@@ -18,7 +18,7 @@
         <form method="POST" enctype="multipart/form-data">
             <input name="upload" type="file">
             <br><br>
-            <input name="key" id="key" type="text" size="40" pattern="[0-1]{26}" placeholder="Ключ" required> <span id="p">0</span>
+            <input name="key" id="key" type="text" size="40" pattern="[0-1]{31}" placeholder="Ключ" required> <span id="p">0</span>
             <br>
             <p><input name="type" type="radio" value="1"> Зашифровать</p>
             <p><input name="type" type="radio" value="2"> Расшифровать</p>
