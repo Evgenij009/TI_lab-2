@@ -41,6 +41,8 @@
             $non = Cipher(basename($newFilename), $key);
         else
             $non = DeCipher(basename($newFilename), $key);
+
+        echo "Time passed: $non";
         ?>
 
     <?php endif; ?>
