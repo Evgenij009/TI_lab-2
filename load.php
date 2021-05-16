@@ -4,7 +4,7 @@
 # BINx31 - 2 147 483 647‬
 function produceSequence(&$numbers, &$register, &$str, &$text, &$bits)
 {
-    $mask_obr = 2147483647;
+    $mask_obr = 2147483647; //31 bit
     $str = '';
     $bits = array();
     $text = array();
@@ -13,7 +13,7 @@ function produceSequence(&$numbers, &$register, &$str, &$text, &$bits)
         for ($i = 0; $i < 8; $i++) {
             $bin = decbin($register);
             $bin = str_pad($bin, 31, 0, STR_PAD_LEFT);
-            $new_bit = intval($bin[0]) ^ intval($bin[28]) ^ intval($bin[30]);
+            $new_bit = intval($bin[0]) ^ intval($bin[28]);
             $bit_key .= $bin[0];
             $register = ($register << 1) | $new_bit;
             $register = $register & $mask_obr;
@@ -25,41 +25,11 @@ function produceSequence(&$numbers, &$register, &$str, &$text, &$bits)
     }
 }
 
-
-# 11010111111010111101011101 = 56602461
-# 11111111111111111111111111 = 67108863
-#X^26 + X^8 + X^7 + X + 1
-/*
-function produceSequence(&$numbers, &$register, &$str, &$text, &$bits)
-{
-    $mask_obr = 67108863;
-    $str = '';
-    $bits = array();
-    $text = array();
-    foreach ($numbers as $b) {
-        $bit_key = '';
-        for ($i = 0; $i < 8; $i++) {
-            $bin = decbin($register);
-            $bin = str_pad($bin, 26, 0, STR_PAD_LEFT);
-            $new_bit = intval($bin[0]) ^ intval($bin[18]) ^ intval($bin[19]) ^ intval($bin[25]);
-            $bit_key .= $bin[0];
-            $register = ($register << 1) | $new_bit;
-            $register = $register & $mask_obr;
-        }
-        $bits[] = $bit_key;
-        $clet = $b ^ bindec($bit_key);
-        $str .= pack('C*', $clet);
-        $text[] = $clet;
-    }
-}
-*/
 
 function Cipher($filename, $key)
 {
     $start_time = microtime(true);
     $register = $key;
-
-
     $enc_file = fopen($filename, 'rb');
     $chunk = fread($enc_file, filesize($filename));
     fclose($enc_file);
@@ -76,6 +46,7 @@ function Cipher($filename, $key)
         echo $bin;
         $i++;
     }
+
     echo "<br><br>";
 
     produceSequence($numbers, $register, $str, $text, $bits);
@@ -83,11 +54,14 @@ function Cipher($filename, $key)
     $end_time = microtime(true);
 
     echo "Биты ключа:<br>";
+    $stringBits = "";
     $i = 0;
-    while (($i < 10) and ($i < count($bits))) {
-        echo $bits[$i];
+    while (($i < 100) and ($i < count($bits))) {
+        $stringBits .= $bits[$i];
         $i++;
     }
+    //сделать вывод отчёт в таблице
+
     echo "<br><br>";
 
     echo "Биты зашифрованного текста:<br>";
